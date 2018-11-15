@@ -19,29 +19,30 @@ class Main{
         }
     }
 
-    int[][] dp;
+    int[][] dp;//For DP
     boolean[][] com;
+    //Recursive Function....calculates the min path from each point
     public int best_path_from(int x, int y,Forest forest){//O(m * n^2). Lord! Forgive me for not reaching n!m!
-        if(com[x][y]!=true){//Reducing 1-2 extra computations
+        if(com[x][y]!=true){//boolean Reducing 1-2 extra computations where actual path = 0
             int result;
             boolean safe = false;
-            for(int i = 0;i<forest.m;i++){
+            for(int i = 0;i<forest.m;i++){//Finds if the spot is safe
                 Charm c = forest.charms[i];
                 if(c.safe(x,y)){
                     safe = true;
                 }
             }
             if(safe){
-                if(x==forest.n-1 && y==forest.n-1){
+                if(x==forest.n-1 && y==forest.n-1){//if we reached the destination
                     result = forest.grid[x][y];
-                }else if(x==forest.n-1){
+                }else if(x==forest.n-1){//If we are in the last row of X-axis
                     result = forest.grid[x][y]+best_path_from(x,y+1,forest);
-                }else if(y==forest.n-1){
+                }else if(y==forest.n-1){//If we are in the last row of Y-axis
                     result = forest.grid[x][y]+best_path_from(x+1,y,forest);
                 }else{
                     result = forest.grid[x][y]+max(best_path_from(x+1,y,forest),best_path_from(x,y+1,forest));
                 }
-            }else{
+            }else{//If the point is unsafe
                 result = minus_infinite;
             }
             dp[x][y] = result;
@@ -52,7 +53,7 @@ class Main{
         }
     }
 
-    public int max(int x,int y){
+    public int max(int x,int y){//Finds the max among 2 values...obvious
         if(x>y){
             return x;
         }else{
@@ -89,7 +90,7 @@ class Main{
         int j;
         int power;
 
-        public boolean safe(int id,int jd){
+        public boolean safe(int id,int jd){//Safety ensurer
             //|i - i'| + |j - j'| ≤ k
             int a = Math.abs(i-id);
             int b = Math.abs(j-jd);
